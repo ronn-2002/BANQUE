@@ -7,11 +7,10 @@
 body, html {
     height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* Supprimez overflow: hidden pour permettre le défilement */
-    /* Si vous voulez limiter le défilement au contenu principal, appliquez overflow: hidden uniquement à .main-content */
+    margin: 0;
+    padding: 0;
 }
 
-/* Image Slider Background */
 .slider-bg {
     position: fixed;
     top: 0;
@@ -85,7 +84,13 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1000;
     padding: 20px;
 }
 
@@ -141,7 +146,7 @@ body, html {
 
 .input-group {
     position: relative;
-    margin-bottom: 1rem; /* Ajouté pour espacer les champs */
+    margin-bottom: 1rem;
 }
 
 .input-group input {
@@ -234,7 +239,7 @@ body, html {
 .app-container {
     display: none;
     height: 100vh;
-    display: flex;
+    width: 100%;
 }
 
 .app-container.active {
@@ -250,8 +255,8 @@ body, html {
     flex-direction: column;
     box-shadow: 5px 0 15px rgba(0,0,0,0.1);
     transition: left 0.3s ease-in-out;
-    height: 100vh; /* Ajout de la hauteur totale */
-    overflow-y: auto; /* Active le défilement vertical */
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .logo {
@@ -267,7 +272,7 @@ body, html {
     flex-direction: column;
     gap: 0.5rem;
     flex-grow: 1;
-    padding-bottom: 2rem; /* Ajout d'un padding pour éviter que le dernier élément soit coupé */
+    padding-bottom: 2rem;
 }
 
 .nav-btn {
@@ -300,7 +305,7 @@ body, html {
     flex-grow: 1;
     padding: 2rem;
     background: #f8f9fa;
-    overflow-y: auto; /* Permet le défilement dans le contenu principal */
+    overflow-y: auto;
 }
 
 .header {
@@ -626,12 +631,12 @@ body, html {
         top: 0;
         left: -100%;
         width: 80%;
-        height: 100vh; /* Hauteur totale sur mobile */
+        height: 100vh;
         background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
         transition: left 0.3s ease-in-out;
         z-index: 1000;
         padding: 1rem;
-        overflow-y: auto; /* Défilement sur mobile */
+        overflow-y: auto;
     }
 
     .sidebar.active {
