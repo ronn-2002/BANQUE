@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BankMaster - Connexion</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Arrière-plan animé et particules -->
+    <div class="animated-background"></div>
+    <div class="particles" id="particles"></div>
+    <div class="slider-bg">
+        <div class="slide slide1"></div>
+        <div class="slide slide2" style="background-image: url('https://source.unsplash.com/1600x900/?finance,bank');"></div>
+        <div class="slide slide3" style="background-image: url('https://source.unsplash.com/1600x900/?money,business');"></div>
+    </div>
+
+    <!-- Écran de connexion -->
+    <div class="login-container" id="login-container">
+        <div class="login-card">
+            <div class="bank-logo">🏦</div>
+            <h1>BankMaster</h1>
+            <p class="bank-tagline">Votre partenaire bancaire sécurisé</p>
+            <form class="login-form" id="login-form">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Mot de passe" required>
+                </div>
+                <button type="submit" class="login-btn">Se connecter</button>
+            </form>
+            <div id="login-error" class="alert alert-error" style="display: none;"></div>
+            <div class="security-features">
+                <div class="security-item">
+                    <span class="security-icon">🔒</span>
+                    <span>Connexion sécurisée</span>
+                </div>
+                <div class="security-item">
+                    <span class="security-icon">🛡️</span>
+                    <span>Protection des données</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application principale -->
+    <div class="app-container" id="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">🏦 BankMaster</div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" onclick="window.showSection('dashboard')">
+                    <span class="icon">📊</span> Tableau de Bord
+                </button>
+                <button class="nav-btn" onclick="window.showSection('home')">
+                    <span class="icon">🏠</span> Accueil
+                </button>
+                <button class="nav-btn" onclick="window.showSection('clients')">
+                    <span class="icon">👤</span> Clients
+                </button>
+                <button class="nav-btn" onclick="window.showSection('accounts')">
+                    <span class="icon">💰</span> Comptes
+                </button>
+                <button class="nav-btn" onclick="window.showSection('operations')">
+                    <span class="icon">🔄</span> Opérations
+                </button>
+                <button class="nav-btn" onclick="window.showSection('loans')">
+                    <span class="icon">💸</span> Prêts
+                </button>
+                <button class="nav-btn" onclick="window.showSection('trash')">
+                    <span class="icon">🗑️</span> Corbeille
+                </button>
+                <button class="nav-btn" onclick="window.showExportModal()">
+                    <span class="icon">📥</span> Exporter
+                </button>
+                <!-- Bouton de déconnexion en bas -->
+                <button class="nav-btn btn-danger" onclick="window.logout()">
+                    <span class="icon">🚪</span> Déconnexion
+                </button>
+            </nav>
+            <!-- Ajoutez des éléments fictifs pour forcer le défilement si nécessaire -->
+            <!-- <div style="height: 200px;"></div> -->
+        </aside>
+
+        <main class="main-content">
+            <span class="mobile-menu-icon" onclick="toggleSidebar()">☰</span>
+            <header class="header">
+                <div class="header-title">Système de Gestion Bancaire</div>
+                <div class="header-actions">
+                    <span class="notification">🔔</span>
+                </div>
+            </header>
+
+            <!-- Section Tableau de Bord -->
+            <section id="dashboard" class="section active">
+                <h2>Tableau de Bord</h2>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>💰 Solde Total</h3>
+                        <p id="total-balance">0 F CFA</p>
+                    </div>
+                    <div class="card">
+                        <h3>👥 Clients Actifs</h3>
+                        <p id="active-clients">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>🏦 Comptes Actifs</h3>
+                        <p id="active-accounts">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>🔄 Opérations Récentes</h3>
+                        <p id="recent-operations">0</p>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>📈 Évolution du Solde</h3>
+                        <select id="dashboard-client">
+                            <option value="">Tous les clients</option>
+                        </select>
+                        <canvas id="balance-chart"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>📊 Opérations Mensuelles</h3>
+                        <canvas id="monthly-operations-chart"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>🥧 Répartition des Types de Comptes</h3>
+                        <canvas id="account-type-chart"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>📉 Répartition des Types de Clients</h3>
+                        <canvas id="client-type-chart"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>📈 Tendances des Prêts</h3>
+                        <canvas id="loan-trend-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Accueil -->
+            <section id="home" class="section">
+                <h2>🏠 Bienvenue chez BankMaster</h2>
+                <div class="form-container">
+                    <h3>Informations du Client</h3>
+                    <div class="form-group">
+                        <label for="home-client">Sélectionner un client</label>
+                        <select id="home-client"></select>
+                    </div>
+                    <div id="client-details" class="dashboard-grid"></div>
+                </div>
+            </section>
+
+            <!-- Section Clients -->
+            <section id="clients" class="section">
+                <h2>👥 Gestion des Clients</h2>
+                <div class="form-container">
+                    <h3>Ajouter un Client</h3>
+                    <form id="client-form" class="form-grid">
+                        <div class="form-group">
+                            <label for="client-name">Nom *</label>
+                            <input type="text" id="client-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-firstname">Prénom *</label>
+                            <input type="text" id="client-firstname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-age">Âge *</label>
+                            <input type="number" id="client-age" min="18" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-type">Type de client *</label>
+                            <select id="client-type" required>
+                                <option value="">Sélectionner...</option>
+                                <option value="Particulier">Particulier</option>
+                                <option value="Salarié">Salarié</option>
+                                <option value="Entreprise">Entreprise</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-income">Revenu mensuel (F CFA) *</label>
+                            <input type="number" id="client-income" min="0" required>
+                        </div>
+                        <div class="form-group" style="display: none;">
+                            <label for="client-contract">Type de contrat</label>
+                            <select id="client-contract">
+                                <option value="">Sélectionner...</option>
+                                <option value="CDI">CDI</option>
+                                <option value="CDD">CDD</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="display: none;">
+                            <label for="client-contract-duration">Durée contrat (mois)</label>
+                            <input type="number" id="client-contract-duration" min="1">
+                        </div>
+                        <button type="submit" class="btn">Ajouter Client</button>
+                    </form>
+                </div>
+                <div class="list-container">
+                    <h3>Liste des Clients</h3>
+                    <div id="client-list"></div>
+                </div>
+            </section>
+
+            <!-- Section Comptes -->
+            <section id="accounts" class="section">
+                <h2>💰 Gestion des Comptes</h2>
+                <div class="form-container">
+                    <h3>Créer un Compte</h3>
+                    <form id="account-form" class="form-grid">
+                        <div class="form-group">
+                            <label for="account-client">Client *</label>
+                            <select id="account-client" required>
+                                <option value="">Sélectionner un client</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-type">Type de compte *</label>
+                            <select id="account-type" required>
+                                <option value="">Sélectionner...</option>
+                                <option value="Courant">Courant</option>
+                                <option value="Épargne libre">Épargne libre</option>
+                                <option value="Épargne bloquée">Épargne bloquée</option>
+                                <option value="Société">Société</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-balance">Solde initial (F CFA) *</label>
+                            <input type="number" id="account-balance" min="0" required>
+                        </div>
+                        <div class="form-group" style="display: none;">
+                            <label for="account-blocked-date">Date de déblocage</label>
+                            <input type="date" id="account-blocked-date">
+                        </div>
+                        <button type="submit" class="btn">Créer Compte</button>
+                    </form>
+                </div>
+                <div class="list-container">
+                    <h3>Liste des Comptes</h3>
+                    <div id="account-list"></div>
+                </div>
+            </section>
+
+            <!-- Section Opérations -->
+            <section id="operations" class="section">
+                <h2>🔄 Opérations Bancaires</h2>
+                <div class="form-container">
+                    <h3>Nouvelle Opération</h3>
+                    <form id="operation-form" class="form-grid">
+                        <div class="form-group">
+                            <label for="operation-account">Compte *</label>
+                            <select id="operation-account" required>
+                                <option value="">Sélectionner un compte</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="operation-type">Type d'opération *</label>
+                            <select id="operation-type" required>
+                                <option value="Dépôt">Dépôt</option>
+                                <option value="Retrait">Retrait</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="operation-amount">Montant (F CFA) *</label>
+                            <input type="number" id="operation-amount" min="1" required>
+                        </div>
+                        <button type="submit" class="btn">Effectuer Opération</button>
+                    </form>
+                </div>
+                <div class="list-container">
+                    <h3>Historique des Opérations</h3>
+                    <div id="operation-list"></div>
+                </div>
+            </section>
+
+            <!-- Section Prêts -->
+            <section id="loans" class="section">
+                <h2>💸 Simulation de Prêt</h2>
+                <div class="form-container">
+                    <h3>Simuler un Prêt</h3>
+                    <form id="loan-form" class="form-grid">
+                        <div class="form-group">
+                            <label for="loan-client">Client *</label>
+                            <select id="loan-client" required>
+                                <option value="">Sélectionner un client</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="loan-amount">Montant du prêt (F CFA) *</label>
+                            <input type="number" id="loan-amount" min="1000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loan-duration">Durée (mois) *</label>
+                            <input type="number" id="loan-duration" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loan-rate">Taux d'intérêt (%)*</label>
+                            <input type="number" id="loan-rate" step="0.1" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loan-type">Type de prêt *</label>
+                            <select id="loan-type" required>
+                                <option value="">Sélectionner...</option>
+                                <option value="Personnel">Personnel</option>
+                                <option value="Immobilier">Immobilier</option>
+                                <option value="Entreprise">Entreprise</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="loan-insurance"> Assurance</label>
+                        </div>
+                        <button type="submit" class="btn">Simuler Prêt</button>
+                    </form>
+                </div>
+                <div id="loan-result" class="list-container" style="display: none;"></div>
+            </section>
+
+            <!-- Section Corbeille -->
+            <section id="trash" class="section">
+                <h2>🗑️ Corbeille</h2>
+                <div class="list-container">
+                    <button class="btn btn-danger" onclick="window.app.clearTrash()">Vider la corbeille</button>
+                    <h3>Éléments Supprimés</h3>
+                    <div id="trash-list"></div>
+                </div>
+            </section>
+
+            <!-- Modal pour exporter les données -->
+            <div class="modal" id="export-modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Exporter les Données</h3>
+                        <span class="close" onclick="document.getElementById('export-modal').style.display='none'">×</span>
+                    </div>
+                    <form id="export-form">
+                        <div class="form-group">
+                            <label for="export-client">Sélectionner un client (facultatif)</label>
+                            <select id="export-client">
+                                <option value="">Tous les clients</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">Exporter</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

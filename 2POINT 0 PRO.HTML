@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BankMaster - Connexion</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h1 {
+            color: #8e44ad;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #8e44ad;
+        }
+
+        .login-btn {
+            padding: 1rem;
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .app-container {
+            display: none;
+            height: 100vh;
+        }
+
+        .app-container.active {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #ecf0f1;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-btn {
+            width: 100%;
+            padding: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background-color: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-btn .icon {
+            font-size: 1.2rem;
+            width: 20px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            padding: 0.75rem 1rem;
+            border: 2px solid #eee;
+            border-radius: 25px;
+            width: 300px;
+            font-size: 1rem;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #8e44ad;
+        }
+
+        .notification {
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification:hover {
+            background-color: #f0f0f0;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .chart-card {
+            grid-column: span 2;
+        }
+
+        .chart-card canvas {
+            max-height: 300px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group select {
+            padding: 0.75rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #8e44ad;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #bdc3c7);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .list-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .list-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                transition: left 0.3s ease;
+                z-index: 100;
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-card {
+                grid-column: auto;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-bar {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Écran de connexion -->
+    <div class="login-container" id="login-container">
+        <div class="login-card">
+            <h1>🏦 BankMaster</h1>
+            <form class="login-form" id="login-form">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Mot de passe" required>
+                </div>
+                <button type="submit" class="login-btn">Se connecter</button>
+            </form>
+            <div id="login-error" class="alert alert-error" style="display: none; margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <!-- Application principale -->
+    <div class="app-container" id="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">🏦 BankMaster</div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" onclick="showSection('dashboard')">
+                    <span class="icon">📊</span> Tableau de Bord
+                </button>
+                 <button class="nav-btn" onclick="showSection('home')">
+                    <span class="icon">🏠</span> Accueil
+                </button>
+                <button class="nav-btn" onclick="showSection('clients')">
+                    <span class="icon">👤</span> Clients
+                </button>
+                <button class="nav-btn" onclick="showSection('accounts')">
+                    <span class="icon">💰</span> Comptes
+                </button>
+                <button class="nav-btn" onclick="showSection('operations')">
+                    <span class="icon">🔄</span> Opérations
+                </button>
+                <button class="nav-btn" onclick="showSection('loans')">
+                    <span class="icon">💸</span> Prêts
+                </button>
+                <button class="nav-btn" onclick="exportData()">
+                    <span class="icon">📥</span> Exporter
+                </button>
+                <button class="nav-btn" onclick="logout()">
+                    <span class="icon">🚪</span> Déconnexion
+                </button>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-title">Système de Gestion Bancaire</div>
+                <div class="header-actions">
+                    <input type="text" placeholder="Rechercher..." class="search-bar" id="search-bar">
+                    <span class="notification" onclick="showNotifications()">🔔</span>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <h2>Tableau de Bord</h2>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>💰 Solde Total</h3>
+                        <p id="total-balance">0 F CFA</p>
+                    </div>
+                    <div class="card">
+                        <h3>👥 Clients Actifs</h3>
+                        <p id="active-clients">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>🏦 Comptes Actifs</h3>
+                        <p id="active-accounts">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>🔄 Opérations Récentes</h3>
+                        <p id="recent-operations">0</p>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>📈 Évolution du Solde</h3>
+                        <select id="dashboard-client" onchange="updateBalanceChart()">
+                            <option value="">Tous les clients</option>
+                        </select>
+                        <canvas id="balance-chart"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3>📊 Opérations Mensuelles</h3>
+                        <canvas id="monthly-operations-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Clients Section -->
+            <section id="clients" class="section">
+                <h2>👥 Gestion des Clients</h2>
+                <div class="form-container">
+                    <h3>Ajouter un Client</h3>
+                    <form id="client-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="client-name">Nom *</label>
+                                <input type="text" id="client-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-firstname">Prénom *</label>
+                                <input type="text" id="client-firstname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-age">Âge *</label>
+                                <input type="number" id="client-age" min="18" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-type">Type de client *</label>
+                                <select id="client-type" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option value="Particulier">Particulier</option>
+                                    <option value="Salarié">Salarié</option>
+                                    <option value="Entreprise">Entreprise</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-income">Revenu mensuel (F CFA) *</label>
+                                <input type="number" id="client-income" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-contract">Type de contrat</label>
+                                <select id="client-contract">
+                                    <option value="">Sélectionner...</option>
+                                    <option value="CDI">CDI</option>
+                                    <option value="CDD">CDD</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-contract-duration">Durée contrat (mois)</label>
+                                <input type="number" id="client-contract-duration" min="1">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Ajouter Client</button>
+                    </form>
+                </div>
+                <div class="list-container">
+                    <h3>Liste des Clients</h3>
+                    <div id="client-list"></div>
+                </div>
+            </section>
+
+            <!-- Accounts Section -->
+            <section id="accounts" class="section">
+                <h2>💰 Gestion des Comptes</h2>
+                <div class="form-container">
+                    <h3>Créer un Compte</h3>
+                    <form id="account-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="account-client">Client *</label>
+                                <select id="account-client" required>
+                                    <option value="">Sélectionner un client</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="account-type">Type de compte *</label>
+                                <select id="account-type" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option value="Courant">Courant</option>
+                                    <option value="Épargne libre">Épargne libre</option>
+                                    <option value="Épargne bloquée">Épargne bloquée</option>
+                                    <option value="Société">Société</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="account-balance">Solde initial (F CFA) *</label>
+                                <input type="number" id="account-balance" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="account-blocked-date">Date de déblocage</label>
+                                <input type="date" id="account-blocked-date">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Créer Compte</button>
+                    </form>
+                </div>
+                <div class="list-container">
+                    <h3>Liste des Comptes</h3>
+                    <div id="account-list"></div>
+                </div>
+            </section>
+
+            <!-- Operations Section -->
+            <section id="operations" class="section">
+                <h2>🔄 Opérations Bancaires</h2>
+                <div class="form-container">
+                    <h3>Nouvelle Opération</h3>
+                    <form id="operation-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="operation-account">Compte *</label>
+                                <select id="operation-account" required>
+                                    <option value="">Sélectionner un compte</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="operation-type">Type d'opération *</label>
+                                <select id="operation-type" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option value="Dépôt">Dépôt</option>
+                                    <option value="Retrait">Retrait</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="operation-amount">Montant (F CFA) *</label>
+                                <input type="number" id="operation-amount" min="1" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Effectuer Opération</button>
+                    </form>
+                </div>
+                <div class="list-container">
+                    <h3>Historique des Opérations</h3>
+                    <div id="operation-list"></div>
+                </div>
+            </section>
+
+            <!-- Loans Section -->
+            <section id="loans" class="section">
+                <h2>💸 Simulation de Prêt</h2>
+                <div class="form-container">
+                    <h3>Simuler un Prêt</h3>
+                    <form id="loan-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="loan-client">Client *</label>
+                                <select id="loan-client" required>
+                                    <option value="">Sélectionner un client</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="loan-amount">Montant du prêt (F CFA) *</label>
+                                <input type="number" id="loan-amount" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loan-duration">Durée (mois) *</label>
+                                <input type="number" id="loan-duration" min="1" max="360" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loan-rate">Taux annuel (%) *</label>
+                                <input type="number" id="loan-rate" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loan-type">Type de prêt *</label>
+                                <select id="loan-type" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option value="Salarié long terme">Salarié long terme</option>
+                                    <option value="Court terme">Particulier/Entreprise court terme</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="loan-insurance"> 
+                                    Inclure assurance (0.3%/an)
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Simuler Prêt</button>
+                    </form>
+                </div>
+                <div id="loan-result" class="list-container" style="display: none;"></div>
+            </section>
+
+            <!-- Home Section -->
+            <section id="home" class="section">
+                <h2>🏠 Bienvenue chez BankMaster</h2>
+                <div class="form-container">
+                    <h3>Types de Comptes Disponibles</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Dépôts</th>
+                                <th>Retraits</th>
+                                <th>Prêt</th>
+                                <th>Apport requis</th>
+                                <th>Conditions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Courant</strong></td>
+                                <td>✅</td>
+                                <td>✅</td>
+                                <td>✅</td>
+                                <td>❌</td>
+                                <td>Salarié</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Épargne libre</strong></td>
+                                <td>✅</td>
+                                <td>✅</td>
+                                <td>❌</td>
+                                <td>❌</td>
+                                <td>Particulier</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Épargne bloquée</strong></td>
+                                <td>✅</td>
+                                <td>❌</td>
+                                <td>❌</td>
+                                <td>❌</td>
+                                <td>Date définie</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Société</strong></td>
+                                <td>✅</td>
+                                <td>✅</td>
+                                <td>✅</td>
+                                <td>200 000 F CFA</td>
+                                <td>RC ou NINEA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Classe principale BankMaster
+        class BankMaster {
+            constructor() {
+                this.clients = JSON.parse(localStorage.getItem('bankmaster_clients')) || [];
+                this.accounts = JSON.parse(localStorage.getItem('bankmaster_accounts')) || [];
+                this.operations = JSON.parse(localStorage.getItem('bankmaster_operations')) || [];
+                this.loans = JSON.parse(localStorage.getItem('bankmaster_loans')) || [];
+                this.isLoggedIn = localStorage.getItem('bankmaster_logged_in') === 'true';
+                this.init();
+            }
+
+            init() {
+                if (this.isLoggedIn) {
+                    this.showApp();
+                } else {
+                    this.showLogin();
+                }
+                this.initEventListeners();
+            }
+
+            initEventListeners() {
+                // Événements de connexion
+                document.getElementById('login-form').addEventListener('submit', (e) => this.handleLogin(e));
+                
+                // Événements des formulaires
+                document.getElementById('client-form').addEventListener('submit', (e) => this.handleAddClient(e));
+                document.getElementById('account-form').addEventListener('submit', (e) => this.handleAddAccount(e));
+                document.getElementById('operation-form').addEventListener('submit', (e) => this.handleAddOperation(e));
+                document.getElementById('loan-form').addEventListener('submit', (e) => this.handleLoanSimulation(e));
+                
+                // Événements des selects
+                document.getElementById('client-type').addEventListener('change', () => this.handleClientTypeChange());
+                document.getElementById('account-type').addEventListener('change', () => this.handleAccountTypeChange());
+                document.getElementById('dashboard-client').addEventListener('change', () => this.updateBalanceChart());
+            }
+
+            generateUUID() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    const r = Math.random() * 16 | 0;
+                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+
+            showLogin() {
+                document.getElementById('login-container').style.display = 'flex';
+                document.getElementById('app-container').classList.remove('active');
+            }
+
+            showApp() {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('app-container').classList.add('active');
+                this.updateDashboard();
+                this.updateAllLists();
+            }
+
+            handleLogin(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username === 'admin' && password === 'admin123') {
+                    this.isLoggedIn = true;
+                    localStorage.setItem('bankmaster_logged_in', 'true');
+                    this.showApp();
+                } else {
+                    this.showError('Nom d\'utilisateur ou mot de passe incorrect');
+                }
+            }
+
+            showError(message) {
+                const errorDiv = document.getElementById('login-error');
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
+            }
+
+            logout() {
+                this.isLoggedIn = false;
+                localStorage.removeItem('bankmaster_logged_in');
+                this.showLogin();
+            }
+
+            saveData() {
+                localStorage.setItem('bankmaster_clients', JSON.stringify(this.clients));
+                localStorage.setItem('bankmaster_accounts', JSON.stringify(this.accounts));
+                localStorage.setItem('bankmaster_operations', JSON.stringify(this.operations));
+                localStorage.setItem('bankmaster_loans', JSON.stringify(this.loans));
+            }
+
+            handleClientTypeChange() {
+                const clientType = document.getElementById('client-type').value;
+                const contractField = document.getElementById('client-contract').parentElement;
+                const durationField = document.getElementById('client-contract-duration').parentElement;
+                
+                if (clientType === 'Salarié') {
+                    contractField.style.display = 'flex';
+                    durationField.style.display = 'flex';
+                    document.getElementById('client-contract').required = true;
+                } else {
+                    contractField.style.display = 'none';
+                    durationField.style.display = 'none';
+                    document.getElementById('client-contract').required = false;
+                    document.getElementById('client-contract-duration').required = false;
+                }
+            }
+
+            handleAccountTypeChange() {
+                const accountType = document.getElementById('account-type').value;
+                const blockedDateField = document.getElementById('account-blocked-date').parentElement;
+                
+                if (accountType === 'Épargne bloquée') {
+                    blockedDateField.style.display = 'flex';
+                    document.getElementById('account-blocked-date').required = true;
+                } else {
+                    blockedDateField.style.display = 'none';
+                    document.getElementById('account-blocked-date').required = false;
+                }
+            }
+
+            handleAddClient(e) {
+                e.preventDefault();
+                const clientData = {
+                    id: this.generateUUID(),
+                    nom: document.getElementById('client-name').value,
+                    prenom: document.getElementById('client-firstname').value,
+                    age: parseInt(document.getElementById('client-age').value),
+                    type: document.getElementById('client-type').value,
+                    revenu: parseFloat(document.getElementById('client-income').value),
+                    contrat: document.getElementById('client-contract').value,
+                    dureeContrat: parseInt(document.getElementById('client-contract-duration').value) || null,
+                    dateCreation: new Date().toISOString()
+                };
+
+                // Validation des règles métier
+                if (clientData.type === 'Salarié' && !clientData.contrat) {
+                    this.showAlert('Le type de contrat est obligatoire pour un salarié', 'error');
+                    return;
+                }
+
+                if (clientData.contrat === 'CDD' && !clientData.dureeContrat) {
+                    this.showAlert('La durée du contrat est obligatoire pour un CDD', 'error');
+                    return;
+                }
+
+                this.clients.push(clientData);
+                this.saveData();
+                this.updateClientList();
+                this.updateClientSelects();
+                this.updateDashboard();
+                document.getElementById('client-form').reset();
+                this.showAlert('Client ajouté avec succès', 'success');
+            }
+
+            handleAddAccount(e) {
+                e.preventDefault();
+                const clientId = document.getElementById('account-client').value;
+                const accountType = document.getElementById('account-type').value;
+                const initialBalance = parseFloat(document.getElementById('account-balance').value);
+                const blockedDate = document.getElementById('account-blocked-date').value;
+
+                const client = this.clients.find(c => c.id === clientId);
+                if (!client) {
+                    this.showAlert('Client non trouvé', 'error');
+                    return;
+                }
+
+                // Validation des règles métier
+                if (accountType === 'Courant' && client.type !== 'Salarié') {
+                    this.showAlert('Le compte courant est réservé aux salariés', 'error');
+                    return;
+                }
+
+                if (accountType === 'Épargne libre' && client.type !== 'Particulier') {
+                    this.showAlert('L\'épargne libre est réservée aux particuliers', 'error');
+                    return;
+                }
+
+                if (accountType === 'Épargne bloquée' && client.type !== 'Particulier') {
+                    this.showAlert('L\'épargne bloquée est réservée aux particuliers', 'error');
+                    return;
+                }
+
+                if (accountType === 'Société' && client.type !== 'Entreprise') {
+                    this.showAlert('Le compte société est réservé aux entreprises', 'error');
+                    return;
+                }
+
+                if (accountType === 'Société' && initialBalance < 200000) {
+                    this.showAlert('Le solde initial d\'un compte société doit être d\'au moins 200 000 F CFA', 'error');
+                    return;
+                }
+
+                if (accountType === 'Épargne bloquée' && !blockedDate) {
+                    this.showAlert('La date de déblocage est obligatoire pour l\'épargne bloquée', 'error');
+                    return;
+                }
+
+                const accountData = {
+                    id: this.generateUUID(),
+                    numero: `AC${Date.now()}${Math.floor(Math.random() * 1000)}`,
+                    clientId: clientId,
+                    type: accountType,
+                    solde: initialBalance,
+                    dateOuverture: new Date().toISOString(),
+                    dateDeblocage: blockedDate || null
+                };
+
+                this.accounts.push(accountData);
+                this.saveData();
+                this.updateAccountList();
+                this.updateAccountSelects();
+                this.updateDashboard();
+                document.getElementById('account-form').reset();
+                this.showAlert('Compte créé avec succès', 'success');
+            }
+
+            handleAddOperation(e) {
+                e.preventDefault();
+                const accountId = document.getElementById('operation-account').value;
+                const operationType = document.getElementById('operation-type').value;
+                const amount = parseFloat(document.getElementById('operation-amount').value);
+
+                const account = this.accounts.find(a => a.id === accountId);
+                if (!account) {
+                    this.showAlert('Compte non trouvé', 'error');
+                    return;
+                }
+
+                // Validation des règles métier
+                if (account.type === 'Épargne bloquée' && operationType === 'Retrait') {
+                    const today = new Date();
+                    const blockedDate = new Date(account.dateDeblocage);
+                    if (today < blockedDate) {
+                        this.showAlert('Retrait impossible : compte bloqué jusqu\'au ' + blockedDate.toLocaleDateString(), 'error');
+                        return;
+                    }
+                }
+
+                if (operationType === 'Retrait' && account.solde < amount) {
+                    this.showAlert('Solde insuffisant', 'error');
+                    return;
+                }
+
+                const oldBalance = account.solde;
+                if (operationType === 'Dépôt') {
+                    account.solde += amount;
+                } else {
+                    account.solde -= amount;
+                }
+
+                const operationData = {
+                    id: this.generateUUID(),
+                    accountId: accountId,
+                    type: operationType,
+                    montant: amount,
+                    soldeAvant: oldBalance,
+                    soldeApres: account.solde,
+                    date: new Date().toISOString()
+                };
+
+                this.operations.push(operationData);
+                this.saveData();
+                this.updateOperationList();
+                this.updateDashboard();
+                this.updateBalanceChart();
+                document.getElementById('operation-form').reset();
+                this.showAlert('Opération effectuée avec succès', 'success');
+            }
+
+            handleLoanSimulation(e) {
+                e.preventDefault();
+                const clientId = document.getElementById('loan-client').value;
+                const amount = parseFloat(document.getElementById('loan-amount').value);
+                const duration = parseInt(document.getElementById('loan-duration').value);
+                const rate = parseFloat(document.getElementById('loan-rate').value);
+                const loanType = document.getElementById('loan-type').value;
+                const insurance = document.getElementById('loan-insurance').checked;
+
+                const client = this.clients.find(c => c.id === clientId);
+                if (!client) {
+                    this.showAlert('Client non trouvé', 'error');
+                    return;
+                }
+
+                const simulation = this.simulateLoan(client, amount, duration, rate, loanType, insurance);
+                this.displayLoanResult(simulation);
+            }
+
+            simulateLoan(client, amount, duration, rate, loanType, insurance) {
+                const monthlyRate = rate / 100 / 12;
+                const monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, duration)) / (Math.pow(1 + monthlyRate, duration) - 1);
+                const totalCost = monthlyPayment * duration;
+                const totalInterest = totalCost - amount;
+
+                let insuranceCost = 0;
+                let monthlyPaymentWithInsurance = monthlyPayment;
+                
+                if (insurance) {
+                    insuranceCost = amount * 0.003 / 12 * duration;
+                    monthlyPaymentWithInsurance = monthlyPayment + (amount * 0.003 / 12);
+                }
+
+                // Vérification de l'admissibilité
+                let eligible = true;
+                let reason = '';
+
+                // Règle 1 : Salarié CDI - fin avant 65 ans
+                if (client.type === 'Salarié' && client.contrat === 'CDI') {
+                    const ageAtEnd = client.age + Math.floor(duration / 12);
+                    if (ageAtEnd >= 65) {
+                        eligible = false;
+                        reason = 'Le prêt se terminera après 65 ans';
+                    }
+                }
+
+                // Règle 2 : Salarié CDD - fin avant fin de contrat
+                if (client.type === 'Salarié' && client.contrat === 'CDD') {
+                    if (duration > client.dureeContrat) {
+                        eligible = false;
+                        reason = 'Le prêt dépasse la durée du contrat';
+                    }
+                }
+
+                // Règle 3 : Particulier/Entreprise - montant plafonné
+                if (client.type === 'Particulier' || client.type === 'Entreprise') {
+                    const clientAccounts = this.accounts.filter(a => a.clientId === client.id);
+                    const avgBalance = clientAccounts.reduce((sum, acc) => sum + acc.solde, 0) / Math.max(clientAccounts.length, 1);
+                    const maxAmount = avgBalance * 3;
+                    
+                    if (amount > maxAmount) {
+                        eligible = false;
+                        reason = `Montant maximum autorisé : ${maxAmount.toLocaleString()} F CFA (3x le solde moyen)`;
+                    }
+                }
+
+                // Règle 4 : Capacité de remboursement (1/3 du revenu)
+                const maxMonthlyPayment = client.revenu / 3;
+                if (monthlyPaymentWithInsurance > maxMonthlyPayment) {
+                    eligible = false;
+                    reason = `Mensualité trop élevée. Maximum autorisé : ${maxMonthlyPayment.toLocaleString()} F CFA`;
+                }
+
+                return {
+                    client,
+                    amount,
+                    duration,
+                    rate,
+                    loanType,
+                    insurance,
+                    monthlyPayment,
+                    monthlyPaymentWithInsurance,
+                    totalCost,
+                    totalInterest,
+                    insuranceCost,
+                    eligible,
+                    reason
+                };
+            }
+
+            displayLoanResult(simulation) {
+                const resultDiv = document.getElementById('loan-result');
+                resultDiv.innerHTML = `
+                    <h3>Résultat de la simulation</h3>
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h4>Client</h4>
+                            <p>${simulation.client.prenom} ${simulation.client.nom}</p>
+                        </div>
+                        <div class="card">
+                            <h4>Montant demandé</h4>
+                            <p>${simulation.amount.toLocaleString()} F CFA</p>
+                        </div>
+                        <div class="card">
+                            <h4>Durée</h4>
+                            <p>${simulation.duration} mois</p>
+                        </div>
+                        <div class="card">
+                            <h4>Taux</h4>
+                            <p>${simulation.rate}%</p>
+                        </div>
+                        <div class="card">
+                            <h4>Mensualité</h4>
+                            <p>${simulation.monthlyPayment.toLocaleString()} F CFA</p>
+                        </div>
+                        <div class="card">
+                            <h4>Mensualité + Assurance</h4>
+                            <p>${simulation.monthlyPaymentWithInsurance.toLocaleString()} F CFA</p>
+                        </div>
+                        <div class="card">
+                            <h4>Coût total</h4>
+                            <p>${simulation.totalCost.toLocaleString()} F CFA</p>
+                        </div>
+                        <div class="card">
+                            <h4>Intérêts</h4>
+                            <p>${simulation.totalInterest.toLocaleString()} F CFA</p>
+                        </div>
+                    </div>
+                    <div class="alert ${simulation.eligible ? 'alert-success' : 'alert-error'}">
+                        <strong>${simulation.eligible ? 'Prêt accepté' : 'Prêt refusé'}</strong>
+                        ${simulation.reason ? `<br>${simulation.reason}` : ''}
+                    </div>
+                `;
+                resultDiv.style.display = 'block';
+
+                // Enregistrer la simulation
+                if (simulation.eligible) {
+                    this.loans.push({
+                        id: this.generateUUID(),
+                        clientId: simulation.client.id,
+                        montant: simulation.amount,
+                        duree: simulation.duration,
+                        taux: simulation.rate,
+                        type: simulation.loanType,
+                        assurance: simulation.insurance,
+                        mensualite: simulation.monthlyPaymentWithInsurance,
+                        dateSimulation: new Date().toISOString(),
+                        statut: 'Simulé'
+                    });
+                    this.saveData();
+                }
+            }
+
+            updateDashboard() {
+                const totalBalance = this.accounts.reduce((sum, acc) => sum + acc.solde, 0);
+                const activeClients = this.clients.length;
+                const activeAccounts = this.accounts.length;
+                const recentOperations = this.operations.filter(op => {
+                    const opDate = new Date(op.date);
+                    const weekAgo = new Date();
+                    weekAgo.setDate(weekAgo.getDate() - 7);
+                    return opDate >= weekAgo;
+                }).length;
+
+                document.getElementById('total-balance').textContent = totalBalance.toLocaleString() + ' F CFA';
+                document.getElementById('active-clients').textContent = activeClients;
+                document.getElementById('active-accounts').textContent = activeAccounts;
+                document.getElementById('recent-operations').textContent = recentOperations;
+
+                this.updateBalanceChart();
+                this.updateMonthlyOperationsChart();
+            }
+
+            updateBalanceChart() {
+                const canvas = document.getElementById('balance-chart');
+                const ctx = canvas.getContext('2d');
+                
+                // Détruire le graphique existant
+                if (window.balanceChart) {
+                    window.balanceChart.destroy();
+                }
+
+                const selectedClientId = document.getElementById('dashboard-client').value;
+                let accounts = this.accounts;
+                
+                if (selectedClientId) {
+                    accounts = accounts.filter(acc => acc.clientId === selectedClientId);
+                }
+
+                const operations = this.operations.filter(op => 
+                    accounts.some(acc => acc.id === op.accountId)
+                );
+
+                const labels = [];
+                const data = [];
+                
+                // Créer les données pour le graphique
+                operations.sort((a, b) => new Date(a.date) - new Date(b.date));
+                
+                let currentBalance = 0;
+                operations.forEach(op => {
+                    const date = new Date(op.date).toLocaleDateString();
+                    labels.push(date);
+                    data.push(op.soldeApres);
+                });
+
+                window.balanceChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Évolution du solde',
+                            data: data,
+                            borderColor: '#8e44ad',
+                            backgroundColor: 'rgba(142, 68, 173, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString() + ' F CFA';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            updateMonthlyOperationsChart() {
+                const canvas = document.getElementById('monthly-operations-chart');
+                const ctx = canvas.getContext('2d');
+                
+                if (window.monthlyChart) {
+                    window.monthlyChart.destroy();
+                }
+
+                const monthlyData = {};
+                this.operations.forEach(op => {
+                    const month = new Date(op.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long' });
+                    monthlyData[month] = (monthlyData[month] || 0) + 1;
+                });
+
+                const labels = Object.keys(monthlyData);
+                const data = Object.values(monthlyData);
+
+                window.monthlyChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Nombre d\'opérations',
+                            data: data,
+                            backgroundColor: 'rgba(142, 68, 173, 0.8)',
+                            borderColor: '#8e44ad',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            updateClientList() {
+                const container = document.getElementById('client-list');
+                container.innerHTML = '';
+
+                this.clients.forEach(client => {
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.innerHTML = `
+                        <div>
+                            <strong>${client.prenom} ${client.nom}</strong><br>
+                            <small>${client.type} - ${client.age} ans - ${client.revenu.toLocaleString()} F CFA/mois</small>
+                            ${client.contrat ? `<br><small>Contrat: ${client.contrat}${client.dureeContrat ? ` (${client.dureeContrat} mois)` : ''}</small>` : ''}
+                        </div>
+                        <div class="list-actions">
+                            <button class="btn btn-small btn-secondary" onclick="app.editClient('${client.id}')">Modifier</button>
+                            <button class="btn btn-small btn-danger" onclick="app.deleteClient('${client.id}')">Supprimer</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            updateAccountList() {
+                const container = document.getElementById('account-list');
+                container.innerHTML = '';
+
+                this.accounts.forEach(account => {
+                    const client = this.clients.find(c => c.id === account.clientId);
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.innerHTML = `
+                        <div>
+                            <strong>${account.numero}</strong><br>
+                            <small>${client ? client.prenom + ' ' + client.nom : 'Client supprimé'}</small><br>
+                            <small>${account.type} - ${account.solde.toLocaleString()} F CFA</small>
+                            ${account.dateDeblocage ? `<br><small>Déblocage: ${new Date(account.dateDeblocage).toLocaleDateString()}</small>` : ''}
+                        </div>
+                        <div class="list-actions">
+                            <button class="btn btn-small btn-secondary" onclick="app.editAccount('${account.id}')">Modifier</button>
+                            <button class="btn btn-small btn-danger" onclick="app.deleteAccount('${account.id}')">Supprimer</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            updateOperationList() {
+                const container = document.getElementById('operation-list');
+                container.innerHTML = '';
+
+                const sortedOperations = [...this.operations].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                sortedOperations.forEach(operation => {
+                    const account = this.accounts.find(a => a.id === operation.accountId);
+                    const client = account ? this.clients.find(c => c.id === account.clientId) : null;
+                    const div = document.createElement('div');
+                    div.className = 'list-item';
+                    div.innerHTML = `
+                        <div>
+                            <strong>${operation.type}</strong><br>
+                            <small>${client ? client.prenom + ' ' + client.nom : 'Client supprimé'} - ${account ? account.numero : 'Compte supprimé'}</small><br>
+                            <small>${operation.montant.toLocaleString()} F CFA - ${new Date(operation.date).toLocaleString()}</small><br>
+                            <small>Solde: ${operation.soldeAvant.toLocaleString()} → ${operation.soldeApres.toLocaleString()} F CFA</small>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            updateAllLists() {
+                this.updateClientList();
+                this.updateAccountList();
+                this.updateOperationList();
+                this.updateClientSelects();
+                this.updateAccountSelects();
+            }
+
+            updateClientSelects() {
+                const selects = ['account-client', 'loan-client', 'dashboard-client'];
+                selects.forEach(selectId => {
+                    const select = document.getElementById(selectId);
+                    if (select) {
+                        // Garder les options par défaut
+                        const defaultOptions = select.querySelectorAll('option[value=""]');
+                        select.innerHTML = '';
+                        defaultOptions.forEach(option => select.appendChild(option));
+                        
+                        this.clients.forEach(client => {
+                            const option = document.createElement('option');
+                            option.value = client.id;
+                            option.textContent = `${client.prenom} ${client.nom}`;
+                            select.appendChild(option);
+                        });
+                    }
+                });
+            }
+
+            updateAccountSelects() {
+                const select = document.getElementById('operation-account');
+                if (select) {
+                    const defaultOption = select.querySelector('option[value=""]');
+                    select.innerHTML = '';
+                    select.appendChild(defaultOption);
+                    
+                    this.accounts.forEach(account => {
+                        const client = this.clients.find(c => c.id === account.clientId);
+                        const option = document.createElement('option');
+                        option.value = account.id;
+                        option.textContent = `${account.numero} - ${client ? client.prenom + ' ' + client.nom : 'Client supprimé'}`;
+                        select.appendChild(option);
+                    });
+                }
+            }
+
+            deleteClient(clientId) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
+                    this.clients = this.clients.filter(c => c.id !== clientId);
+                    this.saveData();
+                    this.updateAllLists();
+                    this.updateDashboard();
+                    this.showAlert('Client supprimé avec succès', 'success');
+                }
+            }
+
+            deleteAccount(accountId) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce compte ?')) {
+                    this.accounts = this.accounts.filter(a => a.id !== accountId);
+                    this.saveData();
+                    this.updateAllLists();
+                    this.updateDashboard();
+                    this.showAlert('Compte supprimé avec succès', 'success');
+                }
+            }
+
+            showAlert(message, type) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.textContent = message;
+                alertDiv.style.position = 'fixed';
+                alertDiv.style.top = '20px';
+                alertDiv.style.right = '20px';
+                alertDiv.style.zIndex = '10000';
+                
+                document.body.appendChild(alertDiv);
+                
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
+            }
+
+            exportData() {
+                const data = {
+                    clients: this.clients,
+                    accounts: this.accounts,
+                    operations: this.operations,
+                    loans: this.loans,
+                    exportDate: new Date().toISOString()
+                };
+
+                const csvContent = this.convertToCSV(data);
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', `bankmaster_export_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                this.showAlert('Export réalisé avec succès', 'success');
+            }
+
+            convertToCSV(data) {
+                let csv = 'EXPORT BANKMASTER\n\n';
+                
+                // Clients
+                csv += 'CLIENTS\n';
+                csv += 'ID,Nom,Prénom,Age,Type,Revenu,Contrat,Durée Contrat,Date Création\n';
+                data.clients.forEach(client => {
+                    csv += `${client.id},${client.nom},${client.prenom},${client.age},${client.type},${client.revenu},${client.contrat || ''},${client.dureeContrat || ''},${client.dateCreation}\n`;
+                });
+                
+                csv += '\nCOMPTES\n';
+                csv += 'ID,Numéro,Client ID,Type,Solde,Date Ouverture,Date Déblocage\n';
+                data.accounts.forEach(account => {
+                    csv += `${account.id},${account.numero},${account.clientId},${account.type},${account.solde},${account.dateOuverture},${account.dateDeblocage || ''}\n`;
+                });
+                
+                csv += '\nOPÉRATIONS\n';
+                csv += 'ID,Compte ID,Type,Montant,Solde Avant,Solde Après,Date\n';
+                data.operations.forEach(operation => {
+                    csv += `${operation.id},${operation.accountId},${operation.type},${operation.montant},${operation.soldeAvant},${operation.soldeApres},${operation.date}\n`;
+                });
+                
+                csv += '\nPRÊTS\n';
+                csv += 'ID,Client ID,Montant,Durée,Taux,Type,Assurance,Mensualité,Date Simulation,Statut\n';
+                data.loans.forEach(loan => {
+                    csv += `${loan.id},${loan.clientId},${loan.montant},${loan.duree},${loan.taux},${loan.type},${loan.assurance},${loan.mensualite},${loan.dateSimulation},${loan.statut}\n`;
+                });
+                
+                return csv;
+            }
+        }
+
+        // Fonctions globales
+        function showSection(sectionId) {
+            // Masquer toutes les sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Afficher la section demandée
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Mettre à jour la navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+        }
+
+        function showNotifications() {
+            alert('Aucune notification pour le moment.');
+        }
+
+        function logout() {
+            app.logout();
+        }
+
+        function exportData() {
+            app.exportData();
+        }
+
+        // Initialisation de l'application
+        let app;
+        document.addEventListener('DOMContentLoaded', () => {
+            app = new BankMaster();
+        });
+    </script>
+</body>
+</html>
